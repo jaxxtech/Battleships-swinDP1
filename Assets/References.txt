@@ -6,13 +6,10 @@ Sound Effects
 	explosion.mp3: http://soundbible.com/1986-Bomb-Exploding.html
 	Splash.mp3: http://soundbible.com/1460-Water-Splash.html
 	shellfalling.mp3: http://soundbible.com/2072-Shell-Falling.html
-	intromusic.mp3:
-	winnermusic.mp3:
-	losermusic.mp3:
 
 Images
 	hit.jpg: https://thecgbros.com/cgi-vfx-breakdowns-hd-battle-for-sevastopol-nezlamna-1-by-postmodern-productions/
 	miss.jpg: https://vimeo.com/87099774
-	shipbattle.jpg:
-	defeated.jpg:
-	winner.jpg:
+	shipbattle.jpg: https://www.pinterest.com.au/pin/766526799049504978/
+	defeated.jpg: http://www.dailymail.co.uk/news/article-3117954/Clinging-dear-life-terrified-migrants-clamber-sinking-ship-taking-Mediterranean-travelled-sink-deaths.html
+	winner.jpg:http://knowyourmeme.com/memes/big-rigs-over-the-road-racing
