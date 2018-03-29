@@ -168,7 +168,7 @@ public static void GameResources{
 
    private void PlaySwinGameIntro()
    {
-		static int ANI_CELL_COUNT = 11;
+		const int ANI_CELL_COUNT = 11;
 
         Audio.PlaySoundEffect(_StartSound);
         SwinGame.Delay(200);
@@ -188,7 +188,7 @@ public static void GameResources{
 	//byval removed as unsure of its use in c#
     private void ShowMessage(/* ByVal */ String message, int number)
 	{
-		static int TX  = 310, TY = 493, TW = 200, TH = 25, STEPS = 5, BG_X = 279, BG_Y = 453;
+		const int TX  = 310, TY = 493, TW = 200, TH = 25, STEPS = 5, BG_X = 279, BG_Y = 453;
 
 		int fullW;
 		Rectangle toDraw;
