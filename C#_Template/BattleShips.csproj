@@ -76,6 +76,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Resources\fonts\ffaccess.ttf" />
+    <None Include="Resources\sounds\Music.ogg" />
     <None Include="Resources\sounds\SwinGameStart.ogg" />
     <WinLibs Include="lib\win32\*.dll" />
   </ItemGroup>
@@ -106,6 +107,7 @@
     <Content Include="Resources\images\splash.png" />
     <Content Include="Resources\images\SplashBack.png" />
     <Content Include="Resources\images\SwinGameAni.jpg" />
+    <Content Include="Resources\sounds\BattleshipGameBoyGameplayMusic.mp3" />
     <Content Include="Resources\sounds\hit.wav" />
     <Content Include="Resources\sounds\horrordrone.mp3" />
     <Content Include="Resources\sounds\lose.wav" />
