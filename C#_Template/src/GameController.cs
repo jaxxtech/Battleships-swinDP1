@@ -38,6 +38,7 @@ public static class GameController
 	/// </summary>
 	/// <value>the human player</value>
 	/// <returns>the human player</returns>
+    /// 
 	public static Player HumanPlayer {
 		get { return _human; }
 	}
@@ -141,15 +142,23 @@ public static class GameController
 		UtilityFunctions.DrawAnimationSequence();
 	}
 
-	/// <summary>
-	/// Listens for attacks to be completed.
-	/// </summary>
-	/// <param name="sender">the game</param>
-	/// <param name="result">the result of the attack</param>
-	/// <remarks>
-	/// Displays a message, plays sound and redraws the screen
-	/// </remarks>
-	private static void AttackCompleted(object sender, AttackResult result)
+    /// <summary>
+    /// Listens for attacks to be completed.
+    /// </summary>
+    /// <param name="sender">the game</param>
+    /// <param name="result">the result of the attack</param>
+    /// <remarks>
+    /// Displays a message, plays sound and redraws the screen
+    /// </remarks>
+
+    public static BattleShipsGame Game
+    {
+        get { return _theGame; }
+    }
+    //Generic property used to return elements of the current game,
+    //Using it to find what player's turn it is, from SeaGrid  -James
+
+    private static void AttackCompleted(object sender, AttackResult result)
 	{
 		bool isHuman = false;
 		isHuman = object.ReferenceEquals(_theGame.Player, HumanPlayer);
