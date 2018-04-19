@@ -1,15 +1,10 @@
+
 using Microsoft.VisualBasic;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-
-
-//========================================================================
-// This conversion was produced by the Free Edition of
-// Instant C# courtesy of Tangible Software Solutions.
-// Order the Premium Edition at https://www.tangiblesoftwaresolutions.com
-//========================================================================
-
+//using System.Data;
+using System.Diagnostics;
 using SwinGameSDK;
 
 /// <summary>
@@ -22,24 +17,20 @@ public static class GameController
 
 	private static BattleShipsGame _theGame;
 	private static Player _human;
+
 	private static AIPlayer _ai;
 
 	private static Stack<GameState> _state = new Stack<GameState>();
 
 	private static AIOption _aiSetting;
-
 	/// <summary>
 	/// Returns the current state of the game, indicating which screen is
 	/// currently being used
 	/// </summary>
 	/// <value>The current state</value>
 	/// <returns>The current state</returns>
-	public static GameState CurrentState
-	{
-		get
-		{
-			return _state.Peek();
-		}
+	public static GameState CurrentState {
+		get { return _state.Peek(); }
 	}
 
 	/// <summary>
@@ -47,12 +38,8 @@ public static class GameController
 	/// </summary>
 	/// <value>the human player</value>
 	/// <returns>the human player</returns>
-	public static Player HumanPlayer
-	{
-		get
-		{
-			return _human;
-		}
+	public static Player HumanPlayer {
+		get { return _human; }
 	}
 
 	/// <summary>
@@ -60,12 +47,8 @@ public static class GameController
 	/// </summary>
 	/// <value>the computer player</value>
 	/// <returns>the conputer player</returns>
-	public static Player ComputerPlayer
-	{
-		get
-		{
-			return _ai;
-		}
+	public static Player ComputerPlayer {
+		get { return _ai; }
 	}
 
 	static GameController()
@@ -86,16 +69,13 @@ public static class GameController
 	public static void StartGame()
 	{
 		if (_theGame != null)
-		{
 			EndGame();
-		}
 
 		//Create the game
 		_theGame = new BattleShipsGame();
 
 		//create the players
-		switch (_aiSetting)
-		{
+		switch (_aiSetting) {
 			case AIOption.Medium:
 				_ai = new AIMediumPlayer(_theGame);
 				break;
@@ -141,8 +121,7 @@ public static class GameController
 
 	private static void PlayHitSequence(int row, int column, bool showAnimation)
 	{
-		if (showAnimation)
-		{
+		if (showAnimation) {
 			UtilityFunctions.AddExplosion(row, column);
 		}
 
@@ -153,8 +132,7 @@ public static class GameController
 
 	private static void PlayMissSequence(int row, int column, bool showAnimation)
 	{
-		if (showAnimation)
-		{
+		if (showAnimation) {
 			UtilityFunctions.AddSplash(row, column);
 		}
 
@@ -173,19 +151,16 @@ public static class GameController
 	/// </remarks>
 	private static void AttackCompleted(object sender, AttackResult result)
 	{
-		bool isHuman = _theGame.Player == HumanPlayer;
+		bool isHuman = false;
+		isHuman = object.ReferenceEquals(_theGame.Player, HumanPlayer);
 
-		if (isHuman)
-		{
+		if (isHuman) {
 			UtilityFunctions.Message = "You " + result.ToString();
-		}
-		else
-		{
+		} else {
 			UtilityFunctions.Message = "The AI " + result.ToString();
 		}
 
-		switch (result.Value)
-		{
+		switch (result.Value) {
 			case ResultOfAttack.Destroyed:
 				PlayHitSequence(result.Row, result.Column, isHuman);
 				Audio.PlaySoundEffect(GameResources.GameSound("Sink"));
@@ -195,18 +170,14 @@ public static class GameController
 				PlayHitSequence(result.Row, result.Column, isHuman);
 				Audio.PlaySoundEffect(GameResources.GameSound("Sink"));
 
-				while (Audio.SoundEffectPlaying(GameResources.GameSound("Sink")))
-				{
+				while (Audio.SoundEffectPlaying(GameResources.GameSound("Sink"))) {
 					SwinGame.Delay(10);
 					SwinGame.RefreshScreen();
 				}
 
-				if (HumanPlayer.IsDestroyed)
-				{
+				if (HumanPlayer.IsDestroyed) {
 					Audio.PlaySoundEffect(GameResources.GameSound("Lose"));
-				}
-				else
-				{
+				} else {
 					Audio.PlaySoundEffect(GameResources.GameSound("Winner"));
 				}
 
@@ -250,7 +221,8 @@ public static class GameController
 	/// </remarks>
 	public static void Attack(int row, int col)
 	{
-		AttackResult result = _theGame.Shoot(row, col);
+		AttackResult result = default(AttackResult);
+		result = _theGame.Shoot(row, col);
 		CheckAttackResult(result);
 	}
 
@@ -262,7 +234,8 @@ public static class GameController
 	/// </remarks>
 	private static void AIAttack()
 	{
-		AttackResult result = _theGame.Player.Attack();
+		AttackResult result = default(AttackResult);
+		result = _theGame.Player.Attack();
 		CheckAttackResult(result);
 	}
 
@@ -276,13 +249,10 @@ public static class GameController
 	/// to the AI player.</remarks>
 	private static void CheckAttackResult(AttackResult result)
 	{
-		switch (result.Value)
-		{
+		switch (result.Value) {
 			case ResultOfAttack.Miss:
-				if (_theGame.Player == ComputerPlayer)
-				{
+				if (object.ReferenceEquals(_theGame.Player, ComputerPlayer))
 					AIAttack();
-				}
 				break;
 			case ResultOfAttack.GameOver:
 				SwitchState(GameState.EndingGame);
@@ -303,8 +273,7 @@ public static class GameController
 		//Read incoming input events
 		SwinGame.ProcessEvents();
 
-		switch (CurrentState)
-		{
+		switch (CurrentState) {
 			case GameState.ViewingMainMenu:
 				MenuController.HandleMainMenuInput();
 				break;
@@ -341,8 +310,7 @@ public static class GameController
 	{
 		UtilityFunctions.DrawBackground();
 
-		switch (CurrentState)
-		{
+		switch (CurrentState) {
 			case GameState.ViewingMainMenu:
 				MenuController.DrawMainMenu();
 				break;
