@@ -1,11 +1,10 @@
-﻿using System;
 
-//========================================================================
-// This conversion was produced by the Free Edition of
-// Instant C# courtesy of Tangible Software Solutions.
-// Order the Premium Edition at https://www.tangiblesoftwaresolutions.com
-//========================================================================
-
+using Microsoft.VisualBasic;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+//using System.Data;
+using System.Diagnostics;
 /// <summary>
 /// The BattleShipsGame controls a big part of the game. It will add the two players
 /// to the game and make sure that both players ships are all deployed before starting the game.
@@ -32,20 +31,16 @@ public class BattleShipsGame
 	public event AttackCompletedHandler AttackCompleted;
 
 	private Player[] _players = new Player[3];
-	private int _playerIndex = 0;
 
+	private int _playerIndex = 0;
 	/// <summary>
 	/// The current player.
 	/// </summary>
 	/// <value>The current player</value>
 	/// <returns>The current player</returns>
 	/// <remarks>This value will switch between the two players as they have their attacks</remarks>
-	public Player Player
-	{
-		get
-		{
-			return _players[_playerIndex];
-		}
+	public Player Player {
+		get { return _players[_playerIndex]; }
 	}
 
 	/// <summary>
@@ -55,17 +50,12 @@ public class BattleShipsGame
 	/// <param name="p"></param>
 	public void AddDeployedPlayer(Player p)
 	{
-		if (_players[0] == null)
-		{
+		if (_players[0] == null) {
 			_players[0] = p;
-		}
-		else if (_players[1] == null)
-		{
+		} else if (_players[1] == null) {
 			_players[1] = p;
 			CompleteDeployment();
-		}
-		else
-		{
+		} else {
 			throw new ApplicationException("You cannot add another player, the game already has two players.");
 		}
 	}
@@ -89,26 +79,32 @@ public class BattleShipsGame
 	/// <returns>The result of the attack</returns>
 	public AttackResult Shoot(int row, int col)
 	{
-		AttackResult newAttack = null;
+		AttackResult newAttack = default(AttackResult);
 		int otherPlayer = (_playerIndex + 1) % 2;
 
 		newAttack = Player.Shoot(row, col);
 
 		//Will exit the game when all players ships are destroyed
-		if (_players[otherPlayer].IsDestroyed)
-		{
+		if (_players[otherPlayer].IsDestroyed) {
 			newAttack = new AttackResult(ResultOfAttack.GameOver, newAttack.Ship, newAttack.Text, row, col);
 		}
 
-		if (AttackCompleted != null)
+		if (AttackCompleted != null) {
 			AttackCompleted(this, newAttack);
+		}
 
 		//change player if the last hit was a miss
-		if (newAttack.Value == ResultOfAttack.Miss)
-		{
+		if (newAttack.Value == ResultOfAttack.Miss) {
 			_playerIndex = otherPlayer;
 		}
 
 		return newAttack;
 	}
 }
+
+//=======================================================
+//Service provided by Telerik (www.telerik.com)
+//Conversion powered by NRefactory.
+//Twitter: @telerik
+//Facebook: facebook.com/telerik
+//=======================================================

@@ -1,13 +1,10 @@
+
 using Microsoft.VisualBasic;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-//========================================================================
-// This conversion was produced by the Free Edition of
-// Instant C# courtesy of Tangible Software Solutions.
-// Order the Premium Edition at https://www.tangiblesoftwaresolutions.com
-//========================================================================
-
+//using System.Data;
+using System.Diagnostics;
 using System.IO;
 using SwinGameSDK;
 
@@ -17,11 +14,11 @@ using SwinGameSDK;
 /// <remarks>
 /// Data is saved to a file.
 /// </remarks>
-internal static class HighScoreController
+static class HighScoreController
 {
 	private const int NAME_WIDTH = 3;
-	private const int SCORES_LEFT = 490;
 
+	private const int SCORES_LEFT = 490;
 	/// <summary>
 	/// The score structure is used to keep the name and
 	/// score of the top players together.
@@ -29,8 +26,8 @@ internal static class HighScoreController
 	private struct Score : IComparable
 	{
 		public string Name;
-		public int Value;
 
+		public int Value;
 		/// <summary>
 		/// Allows scores to be compared to facilitate sorting
 		/// </summary>
@@ -38,21 +35,18 @@ internal static class HighScoreController
 		/// <returns>a value that indicates the sort order</returns>
 		public int CompareTo(object obj)
 		{
-			if (obj is Score)
-			{
+			if (obj is Score) {
 				Score other = (Score)obj;
 
 				return other.Value - this.Value;
-			}
-			else
-			{
+			} else {
 				return 0;
 			}
 		}
 	}
 
-	private static List<Score> _Scores = new List<Score>();
 
+	private static List<Score> _Scores = new List<Score>();
 	/// <summary>
 	/// Loads the scores from the highscores text file.
 	/// </summary>
@@ -60,29 +54,30 @@ internal static class HighScoreController
 	/// The format is
 	/// # of scores
 	/// NNNSSS
-	///
+	/// 
 	/// Where NNN is the name and SSS is the score
 	/// </remarks>
 	private static void LoadScores()
 	{
-		string filename = SwinGame.PathToResource("highscores.txt");
+		string filename = null;
+		filename = SwinGame.PathToResource("highscores.txt");
 
-		StreamReader input = new StreamReader(filename);
+		StreamReader input = default(StreamReader);
+		input = new StreamReader(filename);
 
 		//Read in the # of scores
-		int numScores = Convert.ToInt32(input.ReadLine());
+		int numScores = 0;
+		numScores = Convert.ToInt32(input.ReadLine());
 
 		_Scores.Clear();
 
 		int i = 0;
 
-//INSTANT C# NOTE: There is no C# equivalent to VB's implicit 'once only' variable initialization within loops, so the following variable declaration has been placed prior to the loop:
-		Score s = new Score();
-		for (i = 1; i <= numScores; i++)
-		{
-//			Dim s As Score
-			string line = input.ReadLine();
+		for (i = 1; i <= numScores; i++) {
+			Score s = default(Score);
+			string line = null;
 
+			line = input.ReadLine();
 
 			s.Name = line.Substring(0, NAME_WIDTH);
 			s.Value = Convert.ToInt32(line.Substring(NAME_WIDTH));
@@ -98,19 +93,20 @@ internal static class HighScoreController
 	/// The format is
 	/// # of scores
 	/// NNNSSS
-	///
+	/// 
 	/// Where NNN is the name and SSS is the score
 	/// </remarks>
 	private static void SaveScores()
 	{
-		string filename = SwinGame.PathToResource("highscores.txt");
+		string filename = null;
+		filename = SwinGame.PathToResource("highscores.txt");
 
-		StreamWriter output = new StreamWriter(filename);
+		StreamWriter output = default(StreamWriter);
+		output = new StreamWriter(filename);
 
 		output.WriteLine(_Scores.Count);
 
-		foreach (Score s in _Scores)
-		{
+		foreach (Score s in _Scores) {
 			output.WriteLine(s.Name + s.Value);
 		}
 
@@ -150,11 +146,12 @@ internal static class HighScoreController
 	/// <summary>
 	/// Handles the user input during the top score screen.
 	/// </summary>
-	/// <remarks></remarks>
+	/// <remarks>
+    /// Updated the Keycodes
+    /// </remarks>
 	public static void HandleHighScoreInput()
 	{
-		if (SwinGame.MouseClicked(MouseButton.LeftButton) || SwinGame.KeyTyped(KeyCode.vk_ESCAPE) || SwinGame.KeyTyped(KeyCode.vk_RETURN))
-		{
+        if (SwinGame.MouseClicked(MouseButton.LeftButton) || SwinGame.KeyTyped(KeyCode.EscapeKey) || SwinGame.KeyTyped(KeyCode.ReturnKey)) {
 			GameController.EndCurrentState();
 		}
 	}
@@ -174,8 +171,7 @@ internal static class HighScoreController
 			LoadScores();
 
 		//is it a high score
-		if (value > _Scores[_Scores.Count - 1].Value)
-        {
+		if (value > _Scores[_Scores.Count - 1].Value) {
 			Score s = new Score();
 			s.Value = value;
 
@@ -205,7 +201,6 @@ internal static class HighScoreController
 			_Scores.RemoveAt(_Scores.Count - 1);
 			_Scores.Add(s);
 			_Scores.Sort();
-            SaveScores();
 
 			GameController.EndCurrentState();
 		}

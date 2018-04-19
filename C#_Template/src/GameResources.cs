@@ -1,17 +1,11 @@
+
 using Microsoft.VisualBasic;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+//using System.Data;
+using System.Diagnostics;
 using SwinGameSDK;
-
-//========================================================================
-// This conversion was produced by the Free Edition of
-// Instant C# courtesy of Tangible Software Solutions.
-// Order the Premium Edition at https://www.tangiblesoftwaresolutions.com
-//========================================================================
-
-using SwinGameSDK;
-using System.Collections.Generic;
 
 public static class GameResources
 {
@@ -40,8 +34,7 @@ public static class GameResources
 
 		//Ships
 		int i = 0;
-for (i = 1; i <= 5; i++)
-{
+		for (i = 1; i <= 5; i++) {
 			NewImage("ShipLR" + i, "ship_deploy_horiz_" + i + ".png");
 			NewImage("ShipUD" + i, "ship_deploy_vert_" + i + ".png");
 		}
@@ -57,7 +50,7 @@ for (i = 1; i <= 5; i++)
 		NewSound("Error", "error.wav");
 		NewSound("Hit", "hit.wav");
 		NewSound("Sink", "sink.wav");
-		NewSound("Siren", "siren.wav");
+		//NewSound("Siren", "siren.wav");
 		NewSound("Miss", "watershot.wav");
 		NewSound("Winner", "winner.wav");
 		NewSound("Lose", "lose.wav");
@@ -115,15 +108,15 @@ for (i = 1; i <= 5; i++)
 	private static Dictionary<string, Bitmap> _Images = new Dictionary<string, Bitmap>();
 	private static Dictionary<string, Font> _Fonts = new Dictionary<string, Font>();
 	private static Dictionary<string, SoundEffect> _Sounds = new Dictionary<string, SoundEffect>();
-	private static Dictionary<string, Music> _Music = new Dictionary<string, Music>();
 
+	private static Dictionary<string, Music> _Music = new Dictionary<string, Music>();
 	private static Bitmap _Background;
 	private static Bitmap _Animation;
 	private static Bitmap _LoaderFull;
 	private static Bitmap _LoaderEmpty;
 	private static Font _LoadingFont;
-	private static SoundEffect _StartSound;
 
+	private static SoundEffect _StartSound;
 	/// <summary>
 	/// The Resources Class stores all of the Games Media Resources, such as Images, Fonts
 	/// Sounds, Music.
@@ -160,37 +153,54 @@ for (i = 1; i <= 5; i++)
 		SwinGame.Delay(100);
 		ShowMessage("Game loaded...", 5);
 		SwinGame.Delay(100);
-		EndLoadingScreen(width, height);
+		//EndLoadingScreen(width, height);
 	}
 
+    /// <summary>
+    /// Shows the loading screen.
+    /// </summary>
+    /// <remarks>
+    /// Isuru: Updated the LoadBitmap call
+    /// </remarks>
 	private static void ShowLoadingScreen()
 	{
-		_Background = SwinGame.LoadBitmap(SwinGame.PathToResource("SplashBack.png", ResourceKind.BitmapResource));
+		_Background = SwinGame.LoadBitmap("SplashBack.png");
 		SwinGame.DrawBitmap(_Background, 0, 0);
 		SwinGame.RefreshScreen();
 		SwinGame.ProcessEvents();
 
-		_Animation = SwinGame.LoadBitmap(SwinGame.PathToResource("SwinGameAni.jpg", ResourceKind.BitmapResource));
-		_LoadingFont = SwinGame.LoadFont(SwinGame.PathToResource("arial.ttf", ResourceKind.FontResource), 12);
-		_StartSound = Audio.LoadSoundEffect(SwinGame.PathToResource("SwinGameStart.ogg", ResourceKind.SoundResource));
+		_Animation = SwinGame.LoadBitmap("SwinGameAni.jpg");
+		_LoadingFont = SwinGame.LoadFont("arial.ttf", 12);
+		_StartSound = Audio.LoadSoundEffect("SwinGameStart.ogg");
 
-		_LoaderFull = SwinGame.LoadBitmap(SwinGame.PathToResource("loader_full.png", ResourceKind.BitmapResource));
-		_LoaderEmpty = SwinGame.LoadBitmap(SwinGame.PathToResource("loader_empty.png", ResourceKind.BitmapResource));
+		_LoaderFull = SwinGame.LoadBitmap("loader_full.png");
+		_LoaderEmpty = SwinGame.LoadBitmap("loader_empty.png");
 
 		PlaySwinGameIntro();
 	}
 
+    /// <summary>
+    /// Plays the swin game intro.
+    /// </summary>
+    /// <remarks>
+    /// Isuru: TODO: remove the old swingame intro 
+    /// </remarks>
 	private static void PlaySwinGameIntro()
 	{
+		const int ANI_X = 143;
+		const int ANI_Y = 134;
+		const int ANI_W = 546;
+		const int ANI_H = 327;
+		const int ANI_V_CELL_COUNT = 6;
 		const int ANI_CELL_COUNT = 11;
 
 		Audio.PlaySoundEffect(_StartSound);
 		SwinGame.Delay(200);
 
 		int i = 0;
-		for (i = 0; i < ANI_CELL_COUNT; i++)
-		{
+		for (i = 0; i <= ANI_CELL_COUNT - 1; i++) {
 			SwinGame.DrawBitmap(_Background, 0, 0);
+			//SwinGame.DrawBitmapPart(_Animation, (i / ANI_V_CELL_COUNT) * ANI_W, (i % ANI_V_CELL_COUNT) * ANI_H, ANI_W, ANI_H, ANI_X, ANI_Y);
 			SwinGame.Delay(20);
 			SwinGame.RefreshScreen();
 			SwinGame.ProcessEvents();
@@ -214,9 +224,20 @@ for (i = 1; i <= 5; i++)
 
 		fullW = 260 * number / STEPS;
 		SwinGame.DrawBitmap(_LoaderEmpty, BG_X, BG_Y);
-		SwinGame.DrawBitmapPart(_LoaderFull, 0, 0, fullW, 66, BG_X, BG_Y);
 
-		SwinGame.DrawTextLines(message, Color.White, Color.Transparent, _LoadingFont, FontAlignment.AlignCenter, TX, TY, TW, TH);
+        // TODO: Do this the right way
+        SwinGame.DrawCell (_LoaderFull, 0, BG_X, BG_Y);
+		//Draw Bitmap Part   (src, srcX, srcY, srcW, srcH, x, y)
+		//SwinGame.DrawBitmapPart(_LoaderFull, 0, 0, fullW, 66, BG_X, BG_Y);
+
+		Rectangle toDraw = new Rectangle ();
+        toDraw.X = TX;
+		toDraw.Y =  TY;
+		toDraw.Width = TW;
+        toDraw.Height = TH;
+
+        SwinGame.DrawText (message, Color.White, Color.Transparent,_LoadingFont,FontAlignment.AlignCenter,toDraw);
+		//SwinGame.DrawTextLines(message, Color.White, Color.Transparent, _LoadingFont, FontAlignment.AlignCenter, TX, TY, TW, TH);
 
 		SwinGame.RefreshScreen();
 		SwinGame.ProcessEvents();
@@ -237,19 +258,30 @@ for (i = 1; i <= 5; i++)
 		SwinGame.ChangeScreenSize(width, height);
 	}
 
+    /// <remarks>
+    /// Isuru : updated the swingame call
+    /// </remarks>
 	private static void NewFont(string fontName, string filename, int size)
 	{
-		_Fonts.Add(fontName, SwinGame.LoadFont(SwinGame.PathToResource(filename, ResourceKind.FontResource), size));
+		_Fonts.Add(fontName, SwinGame.LoadFont(filename, size));
 	}
 
+	/// <remarks>
+	/// Isuru : updated the swingame call
+	/// </remarks>
 	private static void NewImage(string imageName, string filename)
 	{
-		_Images.Add(imageName, SwinGame.LoadBitmap(SwinGame.PathToResource(filename, ResourceKind.BitmapResource)));
+		_Images.Add(imageName, SwinGame.LoadBitmap(filename));
 	}
 
+    ///<remarks>
+    /// Isuru: Updated call
+    /// </remarks>
 	private static void NewTransparentColorImage(string imageName, string fileName, Color transColor)
 	{
-		_Images.Add(imageName, SwinGame.LoadBitmap(SwinGame.PathToResource(fileName, ResourceKind.BitmapResource)));
+        Bitmap bitmap = SwinGame.LoadBitmap (SwinGame.PathToResource (fileName,ResourceKind.BitmapResource));
+		//Bitmap bitmap = SwinGame.LoadBitmap (SwinGame.PathToResource (fileName, ResourceKind.BitmapResource), true, transColor);
+		_Images.Add(imageName, bitmap);
 	}
 
 	private static void NewTransparentColourImage(string imageName, string fileName, Color transColor)
@@ -269,40 +301,29 @@ for (i = 1; i <= 5; i++)
 
 	private static void FreeFonts()
 	{
-//INSTANT C# NOTE: Commented this declaration since looping variables in 'foreach' loops are declared in the 'foreach' header in C#:
-//		Font obj = null;
-		foreach (Font obj in _Fonts.Values)
-		{
+		foreach (Font obj in _Fonts.Values) {
 			SwinGame.FreeFont(obj);
 		}
 	}
 
 	private static void FreeImages()
 	{
-//INSTANT C# NOTE: Commented this declaration since looping variables in 'foreach' loops are declared in the 'foreach' header in C#:
-//		Bitmap obj = null;
-		foreach (Bitmap obj in _Images.Values)
-		{
+		foreach (Bitmap obj in _Images.Values) {
 			SwinGame.FreeBitmap(obj);
 		}
 	}
 
 	private static void FreeSounds()
-	{
-//INSTANT C# NOTE: Commented this declaration since looping variables in 'foreach' loops are declared in the 'foreach' header in C#:
-//		SoundEffect obj = null;
-		foreach (SoundEffect obj in _Sounds.Values)
-		{
+	{		
+		foreach (SoundEffect obj in _Sounds.Values) {
 			Audio.FreeSoundEffect(obj);
 		}
 	}
 
 	private static void FreeMusic()
 	{
-//INSTANT C# NOTE: Commented this declaration since looping variables in 'foreach' loops are declared in the 'foreach' header in C#:
-//		Music obj = null;
-		foreach (Music obj in _Music.Values)
-		{
+
+		foreach (Music obj in _Music.Values) {
 			Audio.FreeMusic(obj);
 		}
 	}

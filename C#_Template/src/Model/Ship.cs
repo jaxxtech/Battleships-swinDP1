@@ -1,14 +1,9 @@
+
 using Microsoft.VisualBasic;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-
-//========================================================================
-// This conversion was produced by the Free Edition of
-// Instant C# courtesy of Tangible Software Solutions.
-// Order the Premium Edition at https://www.tangiblesoftwaresolutions.com
-//========================================================================
-
+using System.Diagnostics;
 /// <summary>
 /// A Ship has all the details about itself. For example the shipname,
 /// size, number of hits taken and the location. Its able to add tiles,
@@ -25,19 +20,16 @@ public class Ship
 	private List<Tile> _tiles;
 	private int _row;
 	private int _col;
-	private Direction _direction;
 
+	private Direction _direction;
 	/// <summary>
 	/// The type of ship
 	/// </summary>
 	/// <value>The type of ship</value>
 	/// <returns>The type of ship</returns>
-	public string Name
-	{
-		get
-		{
-			if (_shipName == ShipName.AircraftCarrier)
-			{
+	public string Name {
+		get {
+			if (_shipName == ShipName.AircraftCarrier) {
 				return "Aircraft Carrier";
 			}
 
@@ -50,12 +42,8 @@ public class Ship
 	/// </summary>
 	/// <value>The number of hits the ship can take</value>
 	/// <returns>The number of hits the ship can take</returns>
-	public int Size
-	{
-		get
-		{
-			return _sizeOfShip;
-		}
+	public int Size {
+		get { return _sizeOfShip; }
 	}
 
 	/// <summary>
@@ -64,12 +52,8 @@ public class Ship
 	/// <value>The number of hits the ship has taken.</value>
 	/// <returns>The number of hits the ship has taken</returns>
 	/// <remarks>When this equals Size the ship is sunk</remarks>
-	public int Hits
-	{
-		get
-		{
-			return _hitsTaken;
-		}
+	public int Hits {
+		get { return _hitsTaken; }
 	}
 
 	/// <summary>
@@ -77,28 +61,16 @@ public class Ship
 	/// </summary>
 	/// <value>The topmost location of the ship</value>
 	/// <returns>the row of the ship</returns>
-	public int Row
-	{
-		get
-		{
-			return _row;
-		}
+	public int Row {
+		get { return _row; }
 	}
 
-	public int Column
-	{
-		get
-		{
-			return _col;
-		}
+	public int Column {
+		get { return _col; }
 	}
 
-	public Direction Direction
-	{
-		get
-		{
-			return _direction;
-		}
+	public Direction Direction {
+		get { return _direction; }
 	}
 
 	public Ship(ShipName ship)
@@ -107,7 +79,7 @@ public class Ship
 		_tiles = new List<Tile>();
 
 		//gets the ship size from the enumarator
-		_sizeOfShip = (int)_shipName;
+		_sizeOfShip = (int) _shipName;
 	}
 
 	/// <summary>
@@ -124,8 +96,7 @@ public class Ship
 	/// </summary>
 	public void Remove()
 	{
-		foreach (Tile tile in _tiles)
-		{
+		foreach (Tile tile in _tiles) {
 			tile.ClearShip();
 		}
 		_tiles.Clear();
@@ -140,20 +111,12 @@ public class Ship
 	/// IsDeployed returns if the ships is deployed, if its deplyed it has more than
 	/// 0 tiles
 	/// </summary>
-	public bool IsDeployed
-	{
-		get
-		{
-			return _tiles.Count > 0;
-		}
+	public bool IsDeployed {
+		get { return _tiles.Count > 0; }
 	}
 
-	public bool IsDestroyed
-	{
-		get
-		{
-			return Hits == Size;
-		}
+	public bool IsDestroyed {
+		get { return Hits == Size; }
 	}
 
 	/// <summary>
@@ -169,3 +132,10 @@ public class Ship
 		_direction = direction;
 	}
 }
+
+//=======================================================
+//Service provided by Telerik (www.telerik.com)
+//Conversion powered by NRefactory.
+//Twitter: @telerik
+//Facebook: facebook.com/telerik
+//=======================================================
