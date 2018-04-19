@@ -116,7 +116,7 @@ public static class GameController
 	private static void GridChanged(object sender, EventArgs args)
 	{
 		DrawScreen();
-		SwinGame.RefreshScreen();
+		SwinGame.RefreshScreen(60);
 	}
 
 	private static void PlayHitSequence(int row, int column, bool showAnimation)
@@ -172,7 +172,7 @@ public static class GameController
 
 				while (Audio.SoundEffectPlaying(GameResources.GameSound("Sink"))) {
 					SwinGame.Delay(10);
-					SwinGame.RefreshScreen();
+					SwinGame.RefreshScreen(60);
 				}
 
 				if (HumanPlayer.IsDestroyed) {
@@ -336,7 +336,7 @@ public static class GameController
 
 		UtilityFunctions.DrawAnimations();
 
-		SwinGame.RefreshScreen();
+		SwinGame.RefreshScreen(60);
 	}
 
 	/// <summary>

@@ -177,7 +177,7 @@ For i  = 0 To size - 1
             If _GameTiles(row, col).Ship.IsDestroyed Then
                 _GameTiles(row, col).Shot = True
                 _ShipsKilled += 1
-                Return New AttackResult(ResultOfAttack.Destroyed, _GameTiles(row, col).Ship, "destroyed the enemy's", row, col)
+                Return New AttackResult(ResultOfAttack.Destroyed, _GameTiles(row, col).Ship, "destroyed your", row, col)
             End If
 
             'else hit but not destroyed
