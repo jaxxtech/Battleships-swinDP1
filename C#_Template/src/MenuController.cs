@@ -3,6 +3,7 @@ using Microsoft.VisualBasic;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 //using System.Data;
 using System.Diagnostics;
 using SwinGameSDK;
@@ -13,6 +14,10 @@ using SwinGameSDK;
 /// menu and the settings m,enu.
 /// </summary>
 
+    public class Variables
+{
+    public static bool _isMute = false; //GameController checks this value before playing sound effect
+}
 static class MenuController
 {
 
@@ -37,11 +42,14 @@ static class MenuController
 		new string[] {
 			"EASY",
 			"MEDIUM",
-			"HARD"
+			"HARD",
+            "Mute"  //Mute Button Visible in Setup Menu
 		}
 
 	};
-	private const int MENU_TOP = 575;
+    private const int SETUP_MENU_MUTE_BUTTON = 3;
+    private const int SETUP_MENU_EXIT_BUTTON = 3;
+    private const int MENU_TOP = 575;
 	private const int MENU_LEFT = 30;
 	private const int MENU_GAP = 0;
 	private const int BUTTON_WIDTH = 75;
@@ -62,7 +70,6 @@ static class MenuController
 	private const int SETUP_MENU_MEDIUM_BUTTON = 1;
 	private const int SETUP_MENU_HARD_BUTTON = 2;
 
-	private const int SETUP_MENU_EXIT_BUTTON = 3;
 	private const int GAME_MENU_RETURN_BUTTON = 0;
 	private const int GAME_MENU_SURRENDER_BUTTON = 1;
 
@@ -262,6 +269,8 @@ static class MenuController
 			case GAME_MENU:
 				PerformGameMenuAction(button);
 				break;
+
+
 		}
 	}
 
@@ -304,7 +313,11 @@ static class MenuController
 			case SETUP_MENU_HARD_BUTTON:
 				GameController.SetDifficulty(AIOption.Hard);
 				break;
-		}
+            case SETUP_MENU_MUTE_BUTTON:
+                Variables._isMute = true;
+                SwinGame.StopMusic();   //Stops Any current Playing Background Music
+                break;
+        }
 		//Always end state - handles exit button as well
 		GameController.EndCurrentState();
 	}

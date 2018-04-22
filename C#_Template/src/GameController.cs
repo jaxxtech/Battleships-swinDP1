@@ -125,8 +125,12 @@ public static class GameController
 		if (showAnimation) {
 			UtilityFunctions.AddExplosion(row, column);
 		}
+        if (Variables._isMute ==false)  //Checks Bool in MenuController.cs
+        {
+            Audio.PlaySoundEffect(GameResources.GameSound("Hit"));
+        }
 
-		Audio.PlaySoundEffect(GameResources.GameSound("Hit"));
+		
 
 		UtilityFunctions.DrawAnimationSequence();
 	}
@@ -136,8 +140,11 @@ public static class GameController
 		if (showAnimation) {
 			UtilityFunctions.AddSplash(row, column);
 		}
-
-		Audio.PlaySoundEffect(GameResources.GameSound("Miss"));
+        if (Variables._isMute ==false)
+        {
+            Audio.PlaySoundEffect(GameResources.GameSound("Miss"));
+        }
+		
 
 		UtilityFunctions.DrawAnimationSequence();
 	}
@@ -172,23 +179,31 @@ public static class GameController
 		switch (result.Value) {
 			case ResultOfAttack.Destroyed:
 				PlayHitSequence(result.Row, result.Column, isHuman);
-				Audio.PlaySoundEffect(GameResources.GameSound("Sink"));
+
+				
 
 				break;
 			case ResultOfAttack.GameOver:
 				PlayHitSequence(result.Row, result.Column, isHuman);
-				Audio.PlaySoundEffect(GameResources.GameSound("Sink"));
+                if (Variables._isMute == false)
+                {
+                    Audio.PlaySoundEffect(GameResources.GameSound("Sink"));
+                }
 
-				while (Audio.SoundEffectPlaying(GameResources.GameSound("Sink"))) {
+                while (Audio.SoundEffectPlaying(GameResources.GameSound("Sink"))) {
 					SwinGame.Delay(10);
 					SwinGame.RefreshScreen(60);
 				}
 
 				if (HumanPlayer.IsDestroyed) {
-					Audio.PlaySoundEffect(GameResources.GameSound("Lose"));
+
+					
 				} else {
-					Audio.PlaySoundEffect(GameResources.GameSound("Winner"));
-				}
+                    if (Variables._isMute == false)
+                    {
+                        Audio.PlaySoundEffect(GameResources.GameSound("Winner"));
+                    }
+                }
 
 				break;
 			case ResultOfAttack.Hit:
@@ -198,8 +213,11 @@ public static class GameController
 				PlayMissSequence(result.Row, result.Column, isHuman);
 				break;
 			case ResultOfAttack.ShotAlready:
-				Audio.PlaySoundEffect(GameResources.GameSound("Error"));
-				break;
+                if (Variables._isMute == false)
+                {
+                    Audio.PlaySoundEffect(GameResources.GameSound("Error"));
+                }
+                break;
 		}
 	}
 
