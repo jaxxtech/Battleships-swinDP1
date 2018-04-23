@@ -11,39 +11,44 @@ using SwinGameSDK;
 /// <summary>
 /// The menu controller handles the drawing and user interactions
 /// from the menus in the game. These include the main menu, game
-/// menu and the settings m,enu.
+/// menu and the settings menu.
 /// </summary>
 
     public class Variables
 {
     public static bool _isMute = false; //GameController checks this value before playing sound effect
+    public static string _muteMenuText = "Mute";
 }
 static class MenuController
 {
 
-	/// <summary>
-	/// The menu structure for the game.
-	/// </summary>
-	/// <remarks>
-	/// These are the text captions for the menu items.
-	/// </remarks>
-	private static readonly string[][] _menuStructure = {
-		new string[] {
-			"PLAY",
-			"SETUP",
-			"SCORES",
-			"QUIT"
-		},
-		new string[] {
-			"RETURN",
-			"SURRENDER",
-			"QUIT"
-		},
-		new string[] {
-			"EASY",
-			"MEDIUM",
-			"HARD",
-            "Mute"  //Mute Button Visible in Setup Menu
+
+    /// <summary>
+    /// The menu structure for the game.
+    /// </summary>
+    /// <remarks>
+    /// These are the text captions for the menu items.
+    /// </remarks>
+    private static readonly string[][] _menuStructure = {
+        new string[] {
+            "PLAY",
+            "SETUP",
+            "SCORES",
+            "QUIT"
+        },
+        new string[] {
+            "RETURN",
+            "SURRENDER",
+            "QUIT"
+        },
+        new string[] {
+            "EASY",
+            "MEDIUM",
+            "HARD",
+           Variables._muteMenuText
+              //Mute Button Visible in Setup Menu
+
+
 		}
 
 	};
@@ -85,10 +90,11 @@ static class MenuController
 		HandleMenuInput(MAIN_MENU, 0, 0);
 	}
 
-	/// <summary>
-	/// Handles the processing of user input when the main menu is showing
-	/// </summary>
-	public static void HandleSetupMenuInput()
+
+    /// <summary>
+    /// Handles the processing of user input when the main menu is showing
+    /// </summary>
+    public static void HandleSetupMenuInput()
 	{
 		bool handled = false;
 		handled = HandleMenuInput(SETUP_MENU, 1, 1);
@@ -314,8 +320,21 @@ static class MenuController
 				GameController.SetDifficulty(AIOption.Hard);
 				break;
             case SETUP_MENU_MUTE_BUTTON:
-                Variables._isMute = true;
-                SwinGame.StopMusic();   //Stops Any current Playing Background Music
+
+                switch (Variables._isMute)
+                {
+                    case true:
+                        Variables._muteMenuText = "Mute";
+                        Variables._isMute = false;
+                        SwinGame.PlayMusic(GameResources.GameMusic("Background"));
+                        break;
+                    case false:
+                        Variables._muteMenuText = "Unmute";
+                        Variables._isMute = true;
+                        SwinGame.StopMusic();
+                        break;
+                }
+                  //Stops Any current Playing Background Music
                 break;
         }
 		//Always end state - handles exit button as well

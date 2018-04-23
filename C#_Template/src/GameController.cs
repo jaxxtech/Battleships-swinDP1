@@ -17,8 +17,10 @@ public static class GameController
 
 	private static BattleShipsGame _theGame;
 	private static Player _human;
+    
 
 	private static AIPlayer _ai;
+    
 
 	private static Stack<GameState> _state = new Stack<GameState>();
 
