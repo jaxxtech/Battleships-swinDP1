@@ -163,7 +163,7 @@ static class DeploymentController
 		SwinGame.DrawBitmap(GameResources.GameImage("RandomButton"), RANDOM_BUTTON_LEFT, TOP_BUTTONS_TOP);
 
 		UtilityFunctions.DrawMessage();
-	}
+    }
 
 	/// <summary>
 	/// Gets the ship that the mouse is currently over in the selection panel.
