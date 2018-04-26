@@ -221,7 +221,8 @@ static class UtilityFunctions
 	public static void DrawMessage()
 	{
 		SwinGame.DrawText(Message, MESSAGE_COLOR, GameResources.GameFont("Courier"), FIELD_LEFT, MESSAGE_TOP);
-	}
+        SwinGame.DrawText("To display the menu press escape", SwinGame.RGBAColor(2, 167, 252, 255), 20, 550);
+    }
 
 	/// <summary>
 	/// Draws the background for the current state of the game
