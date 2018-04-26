@@ -3,6 +3,7 @@ using Microsoft.VisualBasic;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 //using System.Data;
 using System.Diagnostics;
 using SwinGameSDK;
@@ -10,38 +11,50 @@ using SwinGameSDK;
 /// <summary>
 /// The menu controller handles the drawing and user interactions
 /// from the menus in the game. These include the main menu, game
-/// menu and the settings m,enu.
+/// menu and the settings menu.
 /// </summary>
 
+    public class Variables
+{
+    public static bool _isMute = false; //GameController checks this value before playing sound effect
+    public static string _muteMenuText = "Mute";
+}
 static class MenuController
 {
 
-	/// <summary>
-	/// The menu structure for the game.
-	/// </summary>
-	/// <remarks>
-	/// These are the text captions for the menu items.
-	/// </remarks>
-	private static readonly string[][] _menuStructure = {
-		new string[] {
-			"PLAY",
-			"SETUP",
-			"SCORES",
-			"QUIT"
-		},
-		new string[] {
-			"RETURN",
-			"SURRENDER",
-			"QUIT"
-		},
-		new string[] {
-			"EASY",
-			"MEDIUM",
-			"HARD"
+
+    /// <summary>
+    /// The menu structure for the game.
+    /// </summary>
+    /// <remarks>
+    /// These are the text captions for the menu items.
+    /// </remarks>
+    private static readonly string[][] _menuStructure = {
+        new string[] {
+            "PLAY",
+            "SETUP",
+            "SCORES",
+            "QUIT"
+        },
+        new string[] {
+            "RETURN",
+            "SURRENDER",
+            "QUIT"
+        },
+        new string[] {
+            "EASY",
+            "MEDIUM",
+            "HARD",
+           Variables._muteMenuText
+              //Mute Button Visible in Setup Menu
+
+
 		}
 
 	};
-	private const int MENU_TOP = 575;
+    private const int SETUP_MENU_MUTE_BUTTON = 3;
+    private const int SETUP_MENU_EXIT_BUTTON = 3;
+    private const int MENU_TOP = 575;
 	private const int MENU_LEFT = 30;
 	private const int MENU_GAP = 0;
 	private const int BUTTON_WIDTH = 75;
@@ -62,7 +75,6 @@ static class MenuController
 	private const int SETUP_MENU_MEDIUM_BUTTON = 1;
 	private const int SETUP_MENU_HARD_BUTTON = 2;
 
-	private const int SETUP_MENU_EXIT_BUTTON = 3;
 	private const int GAME_MENU_RETURN_BUTTON = 0;
 	private const int GAME_MENU_SURRENDER_BUTTON = 1;
 
@@ -78,10 +90,11 @@ static class MenuController
 		HandleMenuInput(MAIN_MENU, 0, 0);
 	}
 
-	/// <summary>
-	/// Handles the processing of user input when the main menu is showing
-	/// </summary>
-	public static void HandleSetupMenuInput()
+
+    /// <summary>
+    /// Handles the processing of user input when the main menu is showing
+    /// </summary>
+    public static void HandleSetupMenuInput()
 	{
 		bool handled = false;
 		handled = HandleMenuInput(SETUP_MENU, 1, 1);
@@ -211,19 +224,7 @@ static class MenuController
             drawRect.Y = btnTop + TEXT_OFFSET;
             drawRect.Width = BUTTON_WIDTH;
             drawRect.Height = BUTTON_HEIGHT;
-
-            //MIKE ARNETT - Feature: Menu color based on difficulty
-            Color MENU_ITEM_COLOR;
-            switch (_menuStructure[menu][i])
-            {
-                case "EASY":  MENU_ITEM_COLOR = Color.Green; break;
-                case "MEDIUM": MENU_ITEM_COLOR = Color.Yellow; break;
-                case "HARD": MENU_ITEM_COLOR = Color.Red;  break;
-                default: MENU_ITEM_COLOR = MENU_COLOR; break;
-            }
-            SwinGame.DrawText (_menuStructure [menu] [i], MENU_ITEM_COLOR, Color.Black, GameResources.GameFont ("Menu"), FontAlignment.AlignCenter, drawRect);
-            //MIKE ARNETT - END feature
-
+            SwinGame.DrawText (_menuStructure [menu] [i], MENU_COLOR, Color.Black, GameResources.GameFont ("Menu"), FontAlignment.AlignCenter, drawRect);
             //SwinGame.DrawTextLines(_menuStructure[menu][i], MENU_COLOR, Color.Black, GameResources.GameFont("Menu"), FontAlignment.AlignCenter, btnLeft + TEXT_OFFSET, btnTop + TEXT_OFFSET, BUTTON_WIDTH, BUTTON_HEIGHT);
 
 			if (SwinGame.MouseDown(MouseButton.LeftButton) & IsMouseOverMenu(i, level, xOffset)) {
@@ -274,6 +275,8 @@ static class MenuController
 			case GAME_MENU:
 				PerformGameMenuAction(button);
 				break;
+
+
 		}
 	}
 
@@ -306,7 +309,8 @@ static class MenuController
 	private static void PerformSetupMenuAction(int button)
 	{
 		switch (button) {
-			case SETUP_MENU_EASY_BUTTON:
+            //BugFix - AI Options now correspond to their difficulty
+            case SETUP_MENU_EASY_BUTTON:
 				GameController.SetDifficulty(AIOption.Easy);
 				break;
 			case SETUP_MENU_MEDIUM_BUTTON:
@@ -315,7 +319,24 @@ static class MenuController
 			case SETUP_MENU_HARD_BUTTON:
 				GameController.SetDifficulty(AIOption.Hard);
 				break;
-		}
+            case SETUP_MENU_MUTE_BUTTON:
+
+                switch (Variables._isMute)
+                {
+                    case true:
+                        Variables._muteMenuText = "Mute";
+                        Variables._isMute = false;
+                        SwinGame.PlayMusic(GameResources.GameMusic("Background"));
+                        break;
+                    case false:
+                        Variables._muteMenuText = "Unmute";
+                        Variables._isMute = true;
+                        SwinGame.StopMusic();
+                        break;
+                }
+                  //Stops Any current Playing Background Music
+                break;
+        }
 		//Always end state - handles exit button as well
 		GameController.EndCurrentState();
 	}
