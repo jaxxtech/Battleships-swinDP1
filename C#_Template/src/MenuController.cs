@@ -224,7 +224,19 @@ static class MenuController
             drawRect.Y = btnTop + TEXT_OFFSET;
             drawRect.Width = BUTTON_WIDTH;
             drawRect.Height = BUTTON_HEIGHT;
-            SwinGame.DrawText (_menuStructure [menu] [i], MENU_COLOR, Color.Black, GameResources.GameFont ("Menu"), FontAlignment.AlignCenter, drawRect);
+			
+			//MIKE ARNETT - Feature: Menu color based on difficulty
+            Color MENU_ITEM_COLOR;
+            switch (_menuStructure[menu][i])
+            {
+                case "EASY":  MENU_ITEM_COLOR = Color.Green; break;
+                case "MEDIUM": MENU_ITEM_COLOR = Color.Yellow; break;
+                case "HARD": MENU_ITEM_COLOR = Color.Red;  break;
+                default: MENU_ITEM_COLOR = MENU_COLOR; break;
+            }
+            SwinGame.DrawText (_menuStructure [menu] [i], MENU_ITEM_COLOR, Color.Black, GameResources.GameFont ("Menu"), FontAlignment.AlignCenter, drawRect);
+            //MIKE ARNETT - END feature
+			
             //SwinGame.DrawTextLines(_menuStructure[menu][i], MENU_COLOR, Color.Black, GameResources.GameFont("Menu"), FontAlignment.AlignCenter, btnLeft + TEXT_OFFSET, btnTop + TEXT_OFFSET, BUTTON_WIDTH, BUTTON_HEIGHT);
 
 			if (SwinGame.MouseDown(MouseButton.LeftButton) & IsMouseOverMenu(i, level, xOffset)) {
