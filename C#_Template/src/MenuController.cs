@@ -237,7 +237,6 @@ static class MenuController
             SwinGame.DrawText (_menuStructure [menu] [i], MENU_ITEM_COLOR, Color.Black, GameResources.GameFont ("Menu"), FontAlignment.AlignCenter, drawRect);
             //MIKE ARNETT - END feature
 			
-            SwinGame.DrawText (_menuStructure [menu] [i], MENU_COLOR, Color.Black, GameResources.GameFont ("Menu"), FontAlignment.AlignCenter, drawRect);
             //SwinGame.DrawTextLines(_menuStructure[menu][i], MENU_COLOR, Color.Black, GameResources.GameFont("Menu"), FontAlignment.AlignCenter, btnLeft + TEXT_OFFSET, btnTop + TEXT_OFFSET, BUTTON_WIDTH, BUTTON_HEIGHT);
 
 			if (SwinGame.MouseDown(MouseButton.LeftButton) & IsMouseOverMenu(i, level, xOffset)) {
